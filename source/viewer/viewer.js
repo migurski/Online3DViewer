@@ -1,3 +1,16 @@
+var the_timeout = undefined;
+
+function show_view(camera)
+{
+    console.log(
+        'show_view()',
+        camera,
+        'center', camera.center,
+        'eye', camera.eye,
+        'up', camera.up,
+    );
+}
+
 OV.GetDefaultCamera = function (direction)
 {
     if (direction === OV.Direction.X) {
@@ -327,6 +340,13 @@ OV.Viewer = class
         let lightDir = OV.SubCoord3D (navigationCamera.eye, navigationCamera.center);
         this.light.position.set (lightDir.x, lightDir.y, lightDir.z);    
         this.renderer.render (this.scene, this.camera);
+        
+        if(the_timeout)
+        {
+            window.clearTimeout(the_timeout);
+        }
+        
+        the_timeout = window.setTimeout(show_view, 250, this.navigation.GetCamera ());
     }
 
     AddMeshes (meshes)
